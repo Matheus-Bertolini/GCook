@@ -1,0 +1,20 @@
+using GCook.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace GCook.Data;
+
+public class AppDbContext : IdentityDbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+        
+    }
+
+    public DbSet<Categoria> categorias { get; set; }
+    public DbSet<Comentario> Comentarios { get; set; }
+    public DbSet<Ingrediente> Ingredientes { get; set; }
+    public DbSet<Receita> Receitas { get; set; }
+    public DbSet<ReceitaIngrediente> ReceitaIngredientes { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
+}
