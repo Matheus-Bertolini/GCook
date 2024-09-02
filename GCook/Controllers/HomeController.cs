@@ -32,6 +32,17 @@ public class HomeController : Controller
         return View(home);
     }
 
+    public IActionResult Receita(int id)
+    {
+        Receita receita = _context.Receitas
+            .Include(r => r.Categoria)
+            .Include(r => r.Ingredientes)
+            .ThenInclude(i => i.Ingrediente)
+            .AsNoTracking()
+            .FirstOrDefault(r => r.Id == id);
+        return View(receita);
+    }
+
     public IActionResult Privacy()
     {
         return View();
