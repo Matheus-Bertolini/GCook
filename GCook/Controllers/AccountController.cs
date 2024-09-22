@@ -53,9 +53,48 @@ public class AccountController : Controller
         return View(login);
     }
 
-    public IActionResult Index()
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActioActionResult> Logout()
     {
-        return View();
+        await _usuarioService.LogoffUsuario();
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public IActionResult Registro()
+    {
+        RegistroVM register = new();
+        return View(register);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Registro(RegistroVM register)
+    {
+        register.Enviado = false;
+        if(ModelState.IsValid)
+        {
+            var result = await _usuarioService.RegistrarUsuario(register);
+            if(result != null)
+              foreach (var error in result)
+              {
+                 ModelState.AddModelError(string.Empty, error);
+              }
+            register.Enviado = result == null;
+        }
+        return View(register);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ConfirmarEmail(string userId, string code)
+    {
+        if (userId == null || code == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        await _usuarioService.ConfirmarEmail(userId, code);
+        return View(true);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
