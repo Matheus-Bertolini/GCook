@@ -55,7 +55,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActioActionResult> Logout()
+    public async Task<IActionResult> Logout()
     {
         await _usuarioService.LogoffUsuario();
         return RedirectToAction("Index", "Home");
