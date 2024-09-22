@@ -9,8 +9,6 @@
 {
     <form class="form-signup" method="post" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" hidden></div>
-        <input type="hidden" asp-for="UrlRetorno">
-
         <div class="form-floating mb-3">
             <input asp-for="Nome" class="form-control">
             <label asp-for="Nome"></label>
@@ -28,18 +26,17 @@
                     <label asp-for="DataNascimento"></label>
                     <span asp-validation-for="DataNascimento" class="text-danger text-sm"></span>
                 </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Senha" class="form-control">
+                    <label asp-for="Senha"></label>
+                    <span asp-validation-for="Senha" class="text-danger text-sm"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="ConfirmacaoSenha" class="form-control">
+                    <label asp-for="ConfirmacaoSenha"></label>
+                    <span asp-validation-for="ConfirmacaoSenha" class="text-danger text-sm"></span>
+                </div>
             </div>
-        </div>
-        <div class="form-floating mb-3">
-            <input asp-for="Senha" class="form-control">
-            <label asp-for="Senha"></label>
-            <span asp-validation-for="Senha" class="text-danger text-sm"></span>
-        </div>
-        <div class="form-floating mb-3">
-            <input asp-for="ConfirmacaoSenha" class="form-control">
-            <label asp-for="ConfirmacaoSenha"></label>
-            <span asp-validation-for="ConfirmacaoSenha" class="text-danger text-sm"></span>
-        </div>
         <div class="col-sm-12 col-md-5 cursor-pointer">
             <img src="~/img/usuarios/no-photo.png" id="PreviewImage" alt="Foto de Avatar" class="w-100 rounded-3" onclick="changeImage()" />
             <div hidden>

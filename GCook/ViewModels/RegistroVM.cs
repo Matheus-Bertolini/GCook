@@ -17,7 +17,7 @@ namespace GCook.ViewModels;
         [Display(Prompt = "Informe seu Email")]
         [Required(ErrorMessage = "Por favor, informe seu Email")]
         [EmailAddress(ErrorMessage = "Por favor, informe um Email Válido!")]
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "O Email deve possuir no máximo 100 caracteres")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "O Email deve possuir no máximo 100 caracteres")]
         public string Email { get; set; }
 
         [DataType(DataType.Password)]
