@@ -23,10 +23,12 @@ public class HomeController : Controller
         HomeVM home = new(){
             Categorias = _context.Categorias
                 .Where(c => c.ExibirHome)
+                .AsNoTracking()
                 .ToList(),
             Receitas = _context.Receitas
                 .Include(r => r.Categoria)
                 .Include(r => r.Ingredientes)
+                .AsNoTracking()
                 .ToList()
         };
         return View(home);
