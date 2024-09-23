@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using GCook.Data;
 using GCook.Helpers;
 using GCook.Models;
@@ -12,7 +8,6 @@ using GCook.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace GCook.Services
 {
@@ -63,118 +58,118 @@ namespace GCook.Services
         }
 
         public async Task<UsuarioVM> GetUsuarioLogado()
-{
-    var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-    if (userId == null)
-    {
-        return null;
-    }
-
-    var userAccount = await _userManager.FindByIdAsync(userId);
-    var usuario = await _contexto.Usuarios.Where(u => u.UsuarioId == userId).SingleOrDefaultAsync();
-    var perfis = string.Join(", ", await _userManager.GetRolesAsync(userAccount));
-    var admin = await _userManager.IsInRoleAsync(userAccount, "Administrador");
-    UsuarioVM usuarioVM = new()
-    {
-        UsuarioId = userId,
-        Nome = usuario.Nome,
-        DataNascimento = usuario.DataNascimento,
-        Foto = usuario.Foto,
-        Email = userAccount.Email,
-        UserName = userAccount.UserName,
-        Perfil = perfis,
-        IsAdmin = admin
-    };
-    return usuarioVM;
-}
-
-public async Task<SignInResult> LoginUsuario(LoginVM loginVM)
-{
-    string userName = loginVM.Email;
-    if (!Helper.IsValidEmail(loginVM.Email))
-    {
-        return null;
-    }
-
-    var user = await _userManager.FindByEmailAsync(loginVM.Email);
-    if (user != null)
-    {
-        userName = user.UserName;
-    }
-
-    var result = await _signInManager.PasswordSignInAsync(
-        userName, loginVM.Senha, loginVM.Lembrar, lockoutOnFailure: true);
-
-    if (result.Succeeded)
-    {
-        _logger.LogInformation($"Usuário {loginVM.Email} acessou o sistema");
-    }
-    if (result.IsLockedOut)
-    {
-        _logger.LogWarning($"Usuário {loginVM.Email} está bloqueado");
-    }
-
-    return result;
-}
-
-public async Task LogoffUsuario()
-{
-    _logger.LogInformation($"Usuário {ClaimTypes.Email} fez logoff");
-    await _signInManager.SignOutAsync();
-}
-
-public async Task<List<string>> RegistrarUsuario(RegistroVM registro)
-{
-    var user = Activator.CreateInstance<IdentityUser>();
-
-    await _userStore.SetUserNameAsync(user, registro.Email, CancellationToken.None);
-    await _emailStore.SetEmailAsync(user, registro.Email, CancellationToken.None);
-    var result = await _userManager.CreateAsync(user, registro.Senha);
-    if (result.Succeeded)
-    {
-        _logger.LogInformation($"Novo usuário registrado com o email {user.Email}.");
-        var userId = await _userManager.GetUserIdAsync(user);
-        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var url = $"http://localhost:5143/Account/ConfirmarEmail?userId={userId}&code={code}";
-        await _userManager.AddToRoleAsync(user, "Usuario");
-        await _emailSender.SendEmailAsync(registro.Email, "GCook - Criação de Conta", GetConfirmEmailHtml(HtmlEncoder.Default.Encode(url)));
-        
-        // Cria a conta pessoal do usuário
-        Usuario usuario = new()
         {
-            UsuarioId = userId,
-            DataNascimento = registro.DataNascimento ?? DateTime.Now,
-            Nome = registro.Nome
-        };
-
-        if (registro.Foto != null)
-        {
-            string fileName = userId + Path.GetExtension(registro.Foto.FileName);
-            string uploads = Path.Combine(_hostEnviroment.WebRootPath, @"img\usuarios");
-            string newFile = Path.Combine(uploads, fileName);
-            using (var stream = new FileStream(newFile, FileMode.Create))
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
             {
-                registro.Foto.CopyTo(stream);
+                return null;
             }
-            usuario.Foto = @"\img\usuarios\" + fileName;
+
+            var userAccount = await _userManager.FindByIdAsync(userId);
+            var usuario = await _contexto.Usuarios.Where(u => u.UsuarioId == userId).SingleOrDefaultAsync();
+            var perfis = string.Join(", ", await _userManager.GetRolesAsync(userAccount));
+            var admin = await _userManager.IsInRoleAsync(userAccount, "Administrador");
+            UsuarioVM usuarioVM = new()
+            {
+                UsuarioId = userId,
+                Nome = usuario.Nome,
+                DataNascimento = usuario.DataNascimento,
+                Foto = usuario.Foto,
+                Email = userAccount.Email,
+                UserName = userAccount.UserName,
+                Perfil = perfis,
+                IsAdmin = admin
+            };
+            return usuarioVM;
         }
 
-        _contexto.Add(usuario);
-        await _contexto.SaveChangesAsync();
-    }
+        public async Task<SignInResult> LoginUsuario(LoginVM login)
+        {
+            string userName = login.Email;
+            if (Helper.IsValidEmail(login.Email))
+            {
+                return null;
+            }
 
-    List<string> errors = new();
-    foreach (var error in result.Errors)
-    {
-        errors.Add(TranslateIdentityErrors.TranslateErrorMessage(error.Code));
-    }
+            var user = await _userManager.FindByEmailAsync(login.Email);
+            if (user != null)
+            {
+                userName = user.UserName;
+            }
 
-    return errors;
-}
-    private string GetConfirmEmailHtml(string url)
-    {
-        var email = @"
+            var result = await _signInManager.PasswordSignInAsync(
+                userName, login.Senha, login.Lembrar, lockoutOnFailure: true);
+
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"Usuário {login.Email} acessou o sistema");
+            }
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning($"Usuário {login.Email} está bloqueado");
+            }
+
+            return result;
+        }
+
+        public async Task LogoffUsuario()
+        {
+            _logger.LogInformation($"Usuário {ClaimTypes.Email} fez logoff");
+            await _signInManager.SignOutAsync();
+        }
+
+        public async Task<List<string>> RegistrarUsuario(RegistroVM registro)
+        {
+            var user = Activator.CreateInstance<IdentityUser>();
+
+            await _userStore.SetUserNameAsync(user, registro.Email, CancellationToken.None);
+            await _emailStore.SetEmailAsync(user, registro.Email, CancellationToken.None);
+            var result = await _userManager.CreateAsync(user, registro.Senha);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"Novo usuário registrado com o email {user.Email}.");
+                var userId = await _userManager.GetUserIdAsync(user);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var url = $"http://localhost:5143/Account/ConfirmarEmail?userId={userId}&code={code}";
+                await _userManager.AddToRoleAsync(user, "Usuario");
+                await _emailSender.SendEmailAsync(registro.Email, "GCook - Criação de Conta", GetConfirmEmailHtml(HtmlEncoder.Default.Encode(url)));
+
+                // Cria a conta pessoal do usuário
+                Usuario usuario = new()
+                {
+                    UsuarioId = userId,
+                    DataNascimento = registro.DataNascimento ?? DateTime.Now,
+                    Nome = registro.Nome
+                };
+
+                if (registro.Foto != null)
+                {
+                    string fileName = userId + Path.GetExtension(registro.Foto.FileName);
+                    string uploads = Path.Combine(_hostEnviroment.WebRootPath, @"img\usuarios");
+                    string newFile = Path.Combine(uploads, fileName);
+                    using (var stream = new FileStream(newFile, FileMode.Create))
+                    {
+                        registro.Foto.CopyTo(stream);
+                    }
+                    usuario.Foto = @"\img\usuarios\" + fileName;
+                }
+
+                _contexto.Add(usuario);
+                await _contexto.SaveChangesAsync();
+            }
+
+            List<string> errors = new();
+            foreach (var error in result.Errors)
+            {
+                errors.Add(TranslateIdentityErrors.TranslateErrorMessage(error.Code));
+            }
+
+            return errors;
+        }
+        private string GetConfirmEmailHtml(string url)
+        {
+            var email = @"
         <!DOCTYPE html>
         <html>
         <head>
@@ -430,8 +425,8 @@ public async Task<List<string>> RegistrarUsuario(RegistroVM registro)
         </body>
         </html>
         ";
-        return email;
-    }
+            return email;
+        }
 
 
 

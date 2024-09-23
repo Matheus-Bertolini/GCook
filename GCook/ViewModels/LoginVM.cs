@@ -7,7 +7,7 @@ namespace GCook.ViewModels;
         [Required(ErrorMessage = "Por favor, informe seu email ou nome de usuário")]
         public string Email { get; set; }
 
-        [Display(Name = "Senha de Acessi", Prompt = "******")]
+        [Display(Name = "Senha de Acesso", Prompt = "******")]
         [Required(ErrorMessage = "Por favor, informe sua senha")]
         [DataType(DataType.Password)]
         public string Senha { get; set; }

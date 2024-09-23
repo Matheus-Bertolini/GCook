@@ -1,8 +1,9 @@
 @model GCook.ViewModels.RegistroVM
-
-ViewData["Title"] = "Registro";
-ViewData["SubTitle"] = Model.Enviado ? "Conta Criada com Sucesso" : "Criar Conta";
-Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+@{
+    ViewData["Title"] = "Registro";
+    ViewData["SubTitle"] = Model.Enviado ? "Conta Criada com Sucesso" : "Criar Conta";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+}
 
 @if (!Model.Enviado)
 {

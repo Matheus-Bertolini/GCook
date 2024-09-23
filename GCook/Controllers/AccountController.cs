@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using GCook.Services;
 using GCook.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +24,7 @@ public class AccountController : Controller
     public IActionResult Login(string returnUrl)
     {
         LoginVM login = new(){
-            UrlRetorno = returnUrl ?? Url.Content("~")
+            UrlRetorno = returnUrl ?? Url.Content("~/")
         };
         return View(login);
     }
