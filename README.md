@@ -17,25 +17,17 @@ Inicie o XAMPP e execute o serviço MySQL.
 
 #Projeto<br></br>
 Clone o repositório:
+git clone https://github.com/Matheus-Bertolini/GCook.git<br></br>
+cd seu_repositorio<br></br>
+Restaure os pacotes:<br></br>
 
---Copiar código
-git clone https://github.com/Matheus-Bertolini/GCook.git
-cd seu_repositorio
-Restaure os pacotes:
+dotnet restore<br></br>
+Execute as migrações do banco de dados:<br></br>
 
-bash
---Copiar código
-dotnet restore
-Execute as migrações do banco de dados:
+dotnet ef database update<br></br>
+Compile e execute o projeto:<br></br>
 
-bash
---Copiar código
-dotnet ef database update
-Compile e execute o projeto:
-
---bash
-Copiar código
-dotnet watch run
+dotnet watch run<br></br>
 O projeto estará disponível em https://localhost:5001 ou http://localhost:5000.
 
 Desenvolvimento
