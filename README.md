@@ -18,28 +18,28 @@ Inicie o XAMPP e execute o serviço MySQL.
 #Projeto<br></br>
 Clone o repositório:
 
-Copiar código
-git clone https://github.com/seu_usuario/seu_repositorio.git
+--Copiar código
+git clone https://github.com/Matheus-Bertolini/GCook.git
 cd seu_repositorio
 Restaure os pacotes:
 
 bash
-Copiar código
+--Copiar código
 dotnet restore
 Execute as migrações do banco de dados:
 
 bash
-Copiar código
+--Copiar código
 dotnet ef database update
 Compile e execute o projeto:
 
-bash
+--bash
 Copiar código
-dotnet run
+dotnet watch run
 O projeto estará disponível em https://localhost:5001 ou http://localhost:5000.
 
 Desenvolvimento
-Durante o desenvolvimento, use o Visual Studio ou o terminal para compilar e executar a aplicação. Verifique se o servidor MySQL está ativo no XAMPP.
+Durante o desenvolvimento, use o Visual Studio Code ou o terminal para compilar e executar a aplicação. Verifique se o servidor MySQL está ativo no XAMPP.
 
 Tecnologias
 ASP.NET Core MVC 8
