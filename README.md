@@ -30,6 +30,9 @@ Compile e execute o projeto:<br></br>
 dotnet watch run<br></br>
 O projeto estará disponível em https://localhost:5001 ou http://localhost:5000.
 
+#Como a acessar a área administrativa?<br></br>
+*Usuario: Admin<br></br>
+*Senha: @Admin123<br></br>
 Desenvolvimento
 Durante o desenvolvimento, use o Visual Studio Code ou o terminal para compilar e executar a aplicação. Verifique se o servidor MySQL está ativo no XAMPP.
 
